@@ -11,353 +11,615 @@ execute:
   echo: true
 ---
 
-[**My Grade:**]{.underline} I believe my grade equivalent to course work evidenced below to be an \_\_.
+My Grade: I believe my grade equivalent to course work evidenced below to be an C+.
 
-[**Learning Objective Evidence:**]{.underline} In the code chunks below, provide code from a Lab or Challenge assignment where you believe you have demonstrated proficiency with the specified learning target. Be sure to specify **where** the code came from (e.g., Lab 4 Question 2). 
+Learning Objective Evidence: In the code chunks below, provide code from a Lab or Challenge assignment where you believe you have demonstrated proficiency with the specified learning target. Be sure to specify where the code came from (e.g., Lab 4 Question 2).
 
-## Working with Data
+Working with Data
 
-**WD-1: I can import data from a _variety_ of formats (e.g., csv, xlsx, txt, etc.).**
+WD-1: I can import data from a variety of formats (e.g., csv, xlsx, txt, etc.).
 
-- `csv`
-```{r wd-1-csv}
+csv Lab 5: Set Up
 
-```
+{r wd-1-csv}
 
-- `xlsx`
-```{r wd-1-xlsx}
+surveys <- read_csv(here::here("Week 5", "Lab 5", "surveys.csv"))
 
-```
+xlsx Practice Activity 4
 
-- `txt`
-```{r wd-1-txt}
+{r wd-1-xlsx} 
 
-```
+military <- read_xlsx(here::here("data", 
+                                 "gov_spending_per_capita.xlsx"), 
+                      sheet = "Share of Govt. spending", 
+                      skip = 6, 
+                      n_max = 191)
 
-**WD-2: I can select necessary columns from a dataset.**
+txt Practice Activity 5.2
 
-```{r wd-2}
+{r wd-1-txt}
 
-```
+message <- read_csv(here::here("scrambled_message.txt")
+                      )
 
-**WD-3: I can filter rows from a dataframe for a _variety_ of data types (e.g., numeric, integer, character, factor, date).**
+WD-2: I can select necessary columns from a dataset.
 
-- numeric
-```{r wd-3-numeric}
+{r wd-2}
 
-```
+#Lab 4, p.5
+
+metro_avg <- avocado_metro |>
+  group_by(region) |>
+  summarise(avg = mean(Total_Volume, na.rm = TRUE)) |> 
+  select(region, avg) |>
+  top_n(5)
+
+WD-3: I can filter rows from a dataframe for a variety of data types (e.g., numeric, integer, character, factor, date).
+
+numeric
+
+{r wd-3-numeric}
+#Lab 4, p.3
+
+avocado_major |>
+  filter(type == "organic" & year == 2017) |>
+  group_by(region) |>
+  summarise((tot_small = sum(Small_Avocado))) 
+  
+
+character – specifically a string
+
+{r wd-3-string}
+
+#Lab 4, p.3
+
+avocado_major |>
+  filter(type == "organic" & year == 2017) |>
+  group_by(region) |>
+  summarise((tot_small = sum(Small_Avocado))) 
+
+factor
+
+{r wd-3-factor}
+#Lab 4, p.3
+
+avocado_major |>
+  filter(type == "organic" & year == 2017) |>
+  group_by(region) |>
+  summarise((tot_small = sum(Small_Avocado))) 
+  
+
+date
+
+{r wd-3-date}
+#PA 5.1, p.3
+
+suspects <- suspects |>
+  filter(pm(with_tz(time = Time.Spotted, tzone = "Iceland"))) == TRUE
+
+WD-4: I can modify existing variables and create new variables in a dataframe for a variety of data types (e.g., numeric, integer, character, factor, date).
+
+numeric
+
+{r wd-4-numeric}
+#Lab 4, p.7
+
+conventional <- avocado_cali |>
+  group_by(region, type) |>
+  mutate(Small = sum(Small_Avocado)/sum(Small_Avocado, Large_Avocado, XL_Avocado),
+         Large = sum(Large_Avocado)/sum(Small_Avocado, Large_Avocado, XL_Avocado),
+         'Extra Large' = sum(XL_Avocado)/sum(Small_Avocado, Large_Avocado, XL_Avocado)) |>
+  pivot_longer(cols = Small: 'Extra Large', names_to = "Avocado_Size", values_to = "Proportions")
+
+character – specifically a string
+
+{r wd-4-string}
 
 
-- character -- specifically a string
-```{r wd-3-string}
+factor
 
-```
+{r wd-4-factor}
+#Practice Activity 3
 
+colleges_clean <- colleges_clean |> 
+  mutate(
+    CONTROL = factor(CONTROL),
+    REGION = factor(REGION)
+  )
 
-- factor
-```{r wd-3-factor}
+date
 
-```
+{r wd-4-date}
+#PA 5.1, p.1
 
-- date
-```{r wd-3-date}
+suspects <- suspects |>
+  mutate(Time.Spotted = force_tz(time = Time.Spotted,
+                                 tzone = "America/Los_Angeles")) |>
+  filter(pm(Time.Spotted) == TRUE)
 
-```
+WD-5: I can use mutating joins to combine multiple dataframes.
 
-**WD-4: I can modify existing variables and create new variables in a dataframe for a _variety_ of data types (e.g., numeric, integer, character, factor, date).**
+left_join()
 
-- numeric
-```{r wd-4-numeric}
-
-```
-
-
-- character -- specifically a string
-```{r wd-4-string}
-
-```
+{r wd-5-left}
 
 
-- factor
-```{r wd-4-factor}
+right_join()
 
-```
+{r wd-5-right}
 
-- date
-```{r wd-4-date}
 
-```
+inner_join()
 
-**WD-5: I can use mutating joins to combine multiple dataframes.**
+{r wd-5-inner}
+#Preview Activity 4.3
 
-- `left_join()`
-```{r wd-5-left}
+inner_join(prof_info, prof_course)
 
-```
+full_join()
 
-- `right_join()`
-```{r wd-5-right}
+{r wd-5-full}
+#Preview Activity 4.3
 
-```
+full_join(prof_info, prof_course)
 
-- `inner_join()`
-```{r wd-5-inner}
+WD-6: I can use filtering joins to filter rows from a dataframe.
 
-```
+semi_join()
 
-- `full_join()`
-```{r wd-5-full}
+{r wd-6-semi}
+#Lab 4, p.2
 
-```
+avocado_metro <- avocado_clean |>
+  semi_join(metro_regions, by = "region")
 
-**WD-6: I can use filtering joins to filter rows from a dataframe.**
+anti_join()
 
-- `semi_join()`
-```{r wd-6-semi}
+{r wd-6-anti}
+#Lab 4, p.2
 
-```
+avocado_major <- avocado_clean |>
+  anti_join(metro_regions, by = "region") 
 
-- `anti_join()`
-```{r wd-6-anti}
+WD-7: I can pivot dataframes from long to wide and visa versa
 
-```
+pivot_longer()
 
-**WD-7: I can pivot dataframes from long to wide and visa versa**
+{r wd-7-long}
+#Lab 4, p.7
 
-- `pivot_longer()`
-```{r wd-7-long}
+conventional <- avocado_cali |>
+  group_by(region, type) |>
+  mutate(Small = sum(Small_Avocado)/sum(Small_Avocado, Large_Avocado, XL_Avocado),
+         Large = sum(Large_Avocado)/sum(Small_Avocado, Large_Avocado, XL_Avocado),
+         'Extra Large' = sum(XL_Avocado)/sum(Small_Avocado, Large_Avocado, XL_Avocado)) |>
+  pivot_longer(cols = Small: 'Extra Large', names_to = "Avocado_Size", values_to = "Proportions")
 
-```
+pivot_wider()
 
-- `pivot_wider()`
-```{r wd-7-wide}
+{r wd-7-wide}
+#Lab 4, p.6
 
-```
+prices <- avocado_cali |>
+  select(region, type, AveragePrice) |>
+  group_by(region, type) |>
+  summarise(avg = mean(AveragePrice)) |>
+  pivot_wider(names_from = region, values_from = avg) |>
+  summarise(diff = across(.cols = 'LosAngeles': 'SanFrancisco', .fns = diff))
 
-## Reproducibility
+Reproducibility
 
-**R-1: I can create professional looking, reproducible analyses using RStudio projects, Quarto documents, and the here package.**
+R-1: I can create professional looking, reproducible analyses using RStudio projects, Quarto documents, and the here package.
 
 I've done this in the following provided assignments:
 
+R-2: I can write well documented and tidy code.
 
-**R-2: I can write well documented and tidy code.**
+Example 1
 
-- Example 1
-```{r r-2-1}
+{r r-2-1}
+#Lab 5, p. 2
 
-```
+surveys |>
+  mutate(
+    species = fct_reorder(species, weight)
+  ) |>
+  ggplot(aes(x = weight, y = species)) + 
+  geom_boxplot(outlier.shape = NA) +
+  geom_jitter(color = "darkseagreen", alpha = 0.1) + 
+  labs(x = "Weight (g)", y = "", title = "Species of Rodent ")
 
-- Example 2
-```{r r-2-2}
 
-```
+Example 2
 
-**R-3: I can write robust programs that are resistant to changes in inputs.**
+{r r-2-2}
+#Lab 4, p.5
 
-- Example 1
-```{r r-3-1}
+options(scipen = 999) #from Google, removes scientific notation
 
-```
+metro_avg <- avocado_metro |>
+  group_by(region) |>
+  summarise(avg = mean(Total_Volume, na.rm = TRUE)) |> 
+  select(region, avg) |>
+  top_n(5)
 
-- Example 2
-```{r r-3-2}
+avocado_metro |>
+  semi_join(metro_avg) |> #returns rows from x with a match in y
+  ggplot(aes(x = region, y = Total_Volume, fill = region)) +
+  geom_boxplot(position = "dodge") + 
+  labs(x = "Region", y = "", title = "Total Volume of Avocados for Top 5 Metro Regions", fill = "Region")
 
-```
 
-## Data Visualization & Summarization
+R-3: I can write robust programs that are resistant to changes in inputs.
 
-**DVS-1: I can create visualizations for a _variety_ of variable types (e.g., numeric, character, factor, date)**
+Example 1
 
-- numeric variables
-```{r dvs-1-num}
+{r r-3-1}
+#Using column names instead of column positions (Lab 4, p.5)
 
-```
+metro_avg <- avocado_metro |>
+  group_by(region) |>
+  summarise(avg = mean(Total_Volume, na.rm = TRUE)) |> 
+  select(region, avg) |>
+  top_n(5)
 
+Example 2
 
-- numeric variables and categorical variables
-```{r dvs-2-num-cat}
+{r r-3-2}
 
-```
+#Not yet, but I anticipate getting there when we learn function stops.
 
 
-- categorical variables
-```{r dvs-2-cat}
+Data Visualization & Summarization
 
-```
+DVS-1: I can create visualizations for a variety of variable types (e.g., numeric, character, factor, date)
 
-- dates
-```{r dvs-2-date}
+numeric variables
 
-```
+{r dvs-1-num}
+#Lab 4, p.7
 
-**DVS-2: I use plot modifications to make my visualization clear to the reader.**
+conventional <- avocado_cali |>
+  group_by(region, type) |>
+  mutate(Small = sum(Small_Avocado)/sum(Small_Avocado, Large_Avocado, XL_Avocado),
+         Large = sum(Large_Avocado)/sum(Small_Avocado, Large_Avocado, XL_Avocado),
+         'Extra Large' = sum(XL_Avocado)/sum(Small_Avocado, Large_Avocado, XL_Avocado)) |>
+  pivot_longer(cols = Small: 'Extra Large', names_to = "Avocado_Size", values_to = "Proportions")
 
-- Example 1
-```{r dvs-2-1}
+conventional |>
+  ggplot(aes(x = region, y = Proportions, fill = Avocado_Size)) + 
+  geom_col(position = "fill") + 
+  facet_wrap(~ type) +
+  scale_x_discrete(guide = guide_axis(n.dodge = 2)) +
+  labs(x = "Region", y = "Proportion of Mean Avocados Sold")
 
-```
 
-- Example 2
-```{r dvs-2-2}
+numeric variables and categorical variables
 
-```
+{r dvs-2-num-cat}
 
-**DVS-3: I show creativity in my visualizations**
+#Lab 5 
 
-- Example 1
-```{r dvs-3-1}
+surveys |>
+  mutate(
+    species = fct_reorder(species, weight)
+  ) |>
+  ggplot(aes(x = weight, y = species)) + 
+  geom_boxplot(outlier.shape = NA) +
+  geom_jitter(color = "darkseagreen", alpha = 0.1) + 
+  labs(x = "Weight (g)", y = "Species of Rodent")
 
-```
+categorical variables
 
-- Example 2
-```{r dvs-3-2}
+{r dvs-2-cat}
+#Lab 5, p.3
 
-```
+surveys |>
+  mutate(day_of_week = fct_collapse(factor(day_of_week), 
+                                    "Weekday" = c("Mon", "Tue", "Wed", "Thu", "Fri"),
+                                    "Weekend" = c("Sat", "Sun"))) |>
+  drop_na(day_of_week) |>
+  ggplot(aes(x = day_of_week)) + 
+  geom_bar() + 
+  labs(x = "Day Type", y = "", title = "Number of Rodents Captured by Day Type") 
 
-**DVS-4: I can calculate numerical summaries of variables.**
 
-- Example 1
-```{r dvs-4-1}
+dates
 
-```
+{r dvs-2-date}
+#Lab 5, p.2
 
-- Example 2
-```{r dvs-4-2}
+surveys |>
+  mutate(day_of_week = factor(day_of_week),
+         fct_relevel(day_of_week, "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")) |>
+  drop_na(day_of_week) |>
+  ggplot(aes(x = day_of_week)) + 
+           geom_bar() + 
+           labs(x = "Day of Week", y = "", title = "Number of Rodents Captured Each Day of the Week")
 
-```
 
-**DVS-5: I can find summaries of variables across multiple groups.** 
+DVS-2: I use plot modifications to make my visualization clear to the reader.
 
-- Example 1
-```{r dvs-5-1}
+Example 1
 
-```
+{r dvs-2-1}
+#Lab 5, p.1
+#Here I used alpha to make the boxplots easier to see, removed the outliers, and provided a nice title rather than having it on the y-axis.
 
-- Example 2
-```{r dvs-5-2}
+surveys |>
+  mutate(
+    species = fct_reorder(species, weight)
+  ) |>
+  ggplot(aes(x = weight, y = species)) + 
+  geom_boxplot(outlier.shape = NA) +
+  geom_jitter(color = "darkseagreen", alpha = 0.1) + 
+  labs(x = "Weight (g)", y = "", title = "Species of Rodent ")
 
-```
+Example 2
 
-**DVS-6: I can create tables which make my summaries clear to the reader.**
+{r dvs-2-2}
+#Lab 4, p.5
+#Used scipen to make it easier to read the values for the y-axis and used fill to make the visualization more clear.
 
-- Example 1
-```{r dvs-6-1}
+options(scipen = 999) #from Google, removes scientific notation
 
-```
+metro_avg <- avocado_metro |>
+  group_by(region) |>
+  summarise(avg = mean(Total_Volume, na.rm = TRUE)) |> 
+  select(region, avg) |>
+  top_n(5)
 
-- Example 2
-```{r dvs-6-2}
+avocado_metro |>
+  semi_join(metro_avg) |> #returns rows from x with a match in y
+  ggplot(aes(x = region, y = Total_Volume, fill = region)) +
+  geom_boxplot(position = "dodge") + 
+  labs(x = "Region", y = "", title = "Total Volume of Avocados for Top 5 Metro Regions", fill = "Region")
 
-```
 
-**DVS-7: I show creativity in my tables.**
+DVS-3: I show creativity in my visualizations
 
-- Example 1
-```{r dvs-7-1}
+Example 1
 
-```
+{r dvs-3-1}
 
-- Example 2
-```{r dvs-7-2}
+#Lab 4, p.5
+#Used scipen to make it easier to read the values for the y-axis and used fill to make the visualization more clear.
 
-```
+options(scipen = 999) #from Google, removes scientific notation
 
-## Program Efficiency
+metro_avg <- avocado_metro |>
+  group_by(region) |>
+  summarise(avg = mean(Total_Volume, na.rm = TRUE)) |> 
+  select(region, avg) |>
+  top_n(5)
 
-**PE-1: I can write concise code which does not repeat itself.**
+avocado_metro |>
+  semi_join(metro_avg) |> #returns rows from x with a match in y
+  ggplot(aes(x = region, y = Total_Volume, fill = region)) +
+  geom_boxplot(position = "dodge") + 
+  labs(x = "Region", y = "", title = "Total Volume of Avocados for Top 5 Metro Regions", fill = "Region")
 
-- using a single function call
-```{r pe-1-one-call}
 
-```
+Example 2
 
-- `across()`
-```{r pe-1-across}
+{r dvs-3-2}
+#Lab 4, p.7
+#Although not my own graph (we had to recreat yours), I believe the way I recreated it was unique and creative in its own way.
 
-```
+conventional <- avocado_cali |>
+  group_by(region, type) |>
+  mutate(Small = sum(Small_Avocado)/sum(Small_Avocado, Large_Avocado, XL_Avocado),
+         Large = sum(Large_Avocado)/sum(Small_Avocado, Large_Avocado, XL_Avocado),
+         'Extra Large' = sum(XL_Avocado)/sum(Small_Avocado, Large_Avocado, XL_Avocado)) |>
+  pivot_longer(cols = Small: 'Extra Large', names_to = "Avocado_Size", values_to = "Proportions")
 
-- `map()` functions
-```{r pe-1-map-1}
+conventional |>
+  ggplot(aes(x = region, y = Proportions, fill = Avocado_Size)) + 
+  geom_col(position = "fill") + 
+  facet_wrap(~ type) +
+  scale_x_discrete(guide = guide_axis(n.dodge = 2)) +
+  labs(x = "Region", y = "Proportion of Mean Avocados Sold")
 
-```
 
-**PE-2: I can write functions to reduce repetition in my code.**
 
-- Example 1
-```{r pe2-1}
+DVS-4: I can calculate numerical summaries of variables.
 
-```
+Example 1
 
-- Example 2
-```{r pe2-2}
+{r dvs-4-1}
+#Lab 4, p.3
 
-```
+avocado_major |>
+  filter(type == "organic" & year == 2017) |>
+  group_by(region) |>
+  summarise((tot_small = sum(Small_Avocado))) 
+  
 
-**PE-3:I can use iteration to reduce repetition in my code.**
+Example 2
 
-- `across()`
-```{r pe-3-across}
+{r dvs-4-2}
+#Lab 3, p.11
 
-```
+hiphop_clean |>
+  group_by(word) |>
+  filter(age < 20) |>
+  summarise(avg = mean(familiarity)) |>
+  slice_max(avg)
 
-- `map()` functions (Provide 2 Examples)
-```{r pe-3-map-1}
+hiphop_clean |>
+  group_by(word) |>
+  filter(age < 20) |>
+  summarise(avg = mean(familiarity)) |>
+  slice_min(avg)
 
-```
+DVS-5: I can find summaries of variables across multiple groups.
 
-```{r pe-3-map-2}
+Example 1
 
-```
+{r dvs-5-1}
+#Lab 4, p.6
 
-**PE-4: I can use modern tools when carrying out my analysis.**
+avocado_cali <- avocado_clean |>
+  filter(region %in% 
+           c("LosAngeles", "SanDiego", "Sacramento", "SanFrancisco")
+         )
 
-- Example 1
-```{r pe-4-1}
+prices <- avocado_cali |>
+  select(region, type, AveragePrice) |>
+  group_by(region, type) |>
+  summarise(avg = mean(AveragePrice)) |>
+  pivot_wider(names_from = region, values_from = avg) |>
+  summarise(diff = across(.cols = 'LosAngeles': 'SanFrancisco', .fns = diff))
 
-```
+Example 2
 
-- Example 2
-```{r pe-4-2}
+{r dvs-5-2}
+#Lab 4, p.5
 
-```
+metro_avg <- avocado_metro |>
+  group_by(region) |>
+  summarise(avg = mean(Total_Volume, na.rm = TRUE)) |> 
+  select(region, avg) |>
+  top_n(5)
 
-## Data Simulation & Modeling
+DVS-6: I can create tables which make my summaries clear to the reader.
 
-**DSM-1: I can simulate data from a _variety_ of probability models.**
+Example 1
 
-- Example 1
-```{r dsm-1-1}
+{r dvs-6-1}
 
-```
 
-- Example 2
-```{r dsm-1-2}
+Example 2
 
-```
+{r dvs-6-2}
 
-**DSM-2: I can fit a linear regression and extract necessary summary measures.**
 
-- Example 1
-```{r dsm-2-1}
+DVS-7: I show creativity in my tables.
 
-```
+Example 1
 
-- Example 2
-```{r dsm-2-2}
+{r dvs-7-1}
 
-```
 
+Example 2
 
-## Revising My Thinking
+{r dvs-7-2}
+
+
+Program Efficiency
+
+PE-1: I can write concise code which does not repeat itself.
+
+using a single function call
+
+{r pe-1-one-call}
+
+
+across()
+
+{r pe-1-across}
+
+
+map() functions
+
+{r pe-1-map-1}
+
+
+PE-2: I can write functions to reduce repetition in my code.
+
+Example 1
+
+{r pe2-1}
+
+
+Example 2
+
+{r pe2-2}
+
+
+PE-3:I can use iteration to reduce repetition in my code.
+
+across()
+
+{r pe-3-across}
+
+
+map() functions (Provide 2 Examples)
+
+{r pe-3-map-1}
+
+
+{r pe-3-map-2}
+
+
+PE-4: I can use modern tools when carrying out my analysis.
+
+Example 1
+
+{r pe-4-1}
+#Lab 5, p.5
+#Efficiently using the pipe function
+
+surveys |>
+  mutate(day_of_week = fct_collapse(factor(day_of_week), 
+                                    "Weekday" = c("Mon", "Tue", "Wed", "Thu", "Fri"),
+                                    "Weekend" = c("Sat", "Sun"))) |>
+  drop_na(day_of_week) |>
+  ggplot(aes(x = day_of_week)) + 
+  geom_bar() + 
+  labs(x = "Day Type", y = "", title = "Number of Rodents Captured by Day Type") 
+
+
+
+Example 2
+
+{r pe-4-2}
+#Lab 5, p.2
+#Functions are not superseded or deprecated
+
+surveys |>
+  mutate(
+    species = fct_reorder(species, weight)
+  ) |>
+  ggplot(aes(x = weight, y = species)) + 
+  geom_boxplot(outlier.shape = NA) +
+  geom_jitter(color = "darkseagreen", alpha = 0.1) + 
+  labs(x = "Weight (g)", y = "", title = "Species of Rodent ")
+
+Data Simulation & Modeling
+
+DSM-1: I can simulate data from a variety of probability models.
+
+Example 1
+
+{r dsm-1-1}
+
+
+Example 2
+
+{r dsm-1-2}
+
+
+DSM-2: I can fit a linear regression and extract necessary summary measures.
+
+Example 1
+
+{r dsm-2-1}
+
+
+Example 2
+
+{r dsm-2-2}
+
+
+Revising My Thinking
+
 <!-- How did you revise your thinking throughout the course? How did you revise your thinking on the code examples you have provided in your portfolio? -->
 
+Extending My Thinking
 
-
-## Extending My Thinking
 <!-- How did you extended your thinking throughout the course? How did you extend your thinking on the code examples you have provided in your portfolio? -->
 
+Peer Support & Collaboration
 
-
-## Peer Support & Collaboration
 <!-- Include an image of feedback you gave that you are proud of (either in a peer review or in Discord) -->
